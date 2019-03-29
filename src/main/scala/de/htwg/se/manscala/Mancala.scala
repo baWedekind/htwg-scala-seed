@@ -1,8 +1,8 @@
-package de.htwg.se.yourgame
+package de.htwg.se.manscala
 
-import de.htwg.se.yourgame.model.Player
+import de.htwg.se.manscala.model.Player
 
-object YourGame {
+object Mancala {
   def main(args: Array[String]): Unit = {
     val student = Player("Your Name")
     println("Hello, " + student.name)
