@@ -1,4 +1,4 @@
-package de.htwg.se.mancala.model
+package de.htwg.se.manscala.model
 
 import scala.collection.mutable.MutableList
 

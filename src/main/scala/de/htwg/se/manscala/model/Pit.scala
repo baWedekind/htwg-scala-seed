@@ -1,6 +1,6 @@
 package de.htwg.se.manscala.model
 
-import de.htwg.se.mancala.model.Player
+import de.htwg.se.manscala.model.Player
 
 case class Pit(var stones: Int, isMancala: Boolean, owner: Player) {
   def incr(): Unit = {
