@@ -32,7 +32,8 @@ case class Board(players: List[Player], pits: List[Pit]) {
     // Idea: make Board have a List of Pits which have an owner Player...
     // Remember that players is a List of Players
     for(j <- 0; j <- stones) {
-      pits(chosenPit + j).incr()
+      // (chosenPit +j) / pits.size should be 0
+      pits((chosenPit + j) % pits.size).incr()
     }
   }
 }
