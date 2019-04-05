@@ -1,6 +1,6 @@
 package de.htwg.se.manscala.model
 
-import de.htwg.se.mancala.model.Player
+import de.htwg.se.manscala.model.Player
 
 /**
   * Board should have a list of players and a list of pits
@@ -31,8 +31,10 @@ case class Board(players: List[Player], pits: List[Pit]) {
     //    var j: Int = i
     // Idea: make Board have a List of Pits which have an owner Player...
     // Remember that players is a List of Players
-    for(j <- 0; j <- stones) {
-      pits(chosenPit + j).incr()
+    for(j <- 0 to stones) {
+      // (chosenPit +j) / pits.size should be 0
+      pits((chosenPit + j) % pits.size).incr()
     }
+    true
   }
 }

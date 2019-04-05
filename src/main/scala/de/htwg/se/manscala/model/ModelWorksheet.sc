@@ -1,4 +1,4 @@
-import de.htwg.se.manscala.model.Player
+import de.htwg.se.manscala.model.{Board, Player}
 
 case class Cell(x:Int, y:Int)
 
@@ -17,3 +17,5 @@ val p1 = Player("Alice")
 val p2 = Player("Bob")
 
 p1.toString()
+
+val board = Board()
