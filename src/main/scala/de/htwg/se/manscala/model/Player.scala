@@ -1,6 +1,9 @@
-package de.htwg.se.manscala.model
+package de.htwg.se.mancala.model
+
+import scala.collection.mutable.MutableList
 
 case class Player(name: String) {
-   override def toString:String = name
+
+  override def toString:String = name
 }
 
