@@ -1,4 +1,5 @@
-import de.htwg.se.manscala.model.{Board, Player}
+import de.htwg.se.manscala.model.Pit.PIT_SIZE
+import de.htwg.se.manscala.model.{Board, Pit, Player}
 
 case class Cell(x:Int, y:Int)
 
@@ -15,7 +16,18 @@ field1.cells(0).y
 
 val p1 = Player("Alice")
 val p2 = Player("Bob")
+val pitSize = PIT_SIZE
+val pitTypeDefaultP1 = Pit(pitSize, isMancala = false, p1)
+val pitTypeDefaultP2 = Pit(pitSize, isMancala = false, p2)
+val pits = List(pitTypeDefaultP1.copy(), pitTypeDefaultP1.copy(),
+  pitTypeDefaultP1.copy(), pitTypeDefaultP1.copy(),
+  pitTypeDefaultP1.copy(), pitTypeDefaultP1.copy(),
+  pitTypeDefaultP1.copy(), Pit(0, isMancala = true, p1),
+  pitTypeDefaultP2.copy(), pitTypeDefaultP2.copy(),
+  pitTypeDefaultP2.copy(), pitTypeDefaultP2.copy(),
+  pitTypeDefaultP2.copy(), pitTypeDefaultP2.copy(),
+  pitTypeDefaultP2.copy(), Pit(0, isMancala = true, p2))
 
 p1.toString()
 
-val board = Board()
+val board = Board(List(p1, p2), pits)
