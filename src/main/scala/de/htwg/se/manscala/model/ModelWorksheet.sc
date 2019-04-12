@@ -28,6 +28,10 @@ val pits = List(pitTypeDefaultP1.copy(), pitTypeDefaultP1.copy(),
   pitTypeDefaultP2.copy(), pitTypeDefaultP2.copy(),
   pitTypeDefaultP2.copy(), Pit(0, isMancala = true, p2))
 
+for (i <- 0 to Board.SIDE_LENGTH * 2) {
+
+}
+
 p1.toString()
 
 val board = Board(List(p1, p2), pits)
