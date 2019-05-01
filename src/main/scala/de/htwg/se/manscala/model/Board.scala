@@ -35,7 +35,7 @@ case class Board(players: List[Player], pits: List[Pit]) {
       stones = pits(chosenPit).emptyPit()
     } else {
       // illegal number chosen
-      false
+      return false
     }
     //    var j: Int = i
     // Idea: make Board have a List of Pits which have an owner Player...
@@ -45,5 +45,14 @@ case class Board(players: List[Player], pits: List[Pit]) {
       pits((chosenPit + j) % pits.size).incr()
     }
     true
+  }
+
+  override def toString:String = {
+    val buildString = new StringBuilder("{")
+    for (pit <- pits) {
+      buildString.append(pit.toString)
+      // TODO: Beautify Board output
+    }
+    buildString.append("}").toString()
   }
 }

@@ -17,5 +17,8 @@ case class Pit(var stones: Int, isMancala: Boolean, owner: Player) {
     ret
   }
 
-  override def toString:String = "(" + this.stones + ")"
+  override def toString:String = this.isMancala match {
+    case false => "(" + this.stones + ")"
+    case true => "([" + this.stones + "])"
+  }
 }
