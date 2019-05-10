@@ -1,51 +1,55 @@
 package de.htwg.se.manscala.controller
 
-import org.scalatest.{Matchers, WordSpec}
+import de.htwg.se.manscala.model.{Board, Player}
 
+import org.scalatest._
+import org.junit.runner.RunWith
+import org.scalatest.junit.JUnitRunner
+
+@RunWith(classOf[JUnitRunner])
 class ControllerSpec extends WordSpec with Matchers {
 
   "A Controller"  when {
-    "observed by a Controller" should {
-    "add" in {
-
-    }
-
-    "subscribers" in {
-
-    }
-
-    "subscribers_$eq" in {
-
-    }
-
-    "notifyObservers" in {
-
-    }
-
-    "remove" in {
-
-    }
-
-    "move" in {
-
-    }
-
-    "boardToString" in {
-
-    }
-
-    "board" in {
-
-    }
-
-    "board_$eq" in {
-
-    }
-
-    "createDefaultBoard" in {
-
-    }
-
-    }
+    "new" should {
+      val board = new Board()
+      val controller = new Controller(board, board.players.head.id)
+      "have a Board" in {
+        controller.board shouldBe a[Board]
+      }
+      "and a current Player" in {
+        controller.currPlayer shouldBe 0
+      }
+      controller.createDefaultBoard()
+      "create a default Board" in {
+        controller.board should be(new Board())
+      }
+      "return a nice String representation of Board" in {
+        controller.boardToString should be(board.toString())
+      }
+      "check a move is legal and return true" in {
+        controller.checkMove(3)
+      }
+      "or false" when {
+        val mancalaPit = Board.SIDE_LENGTH
+        "the chosen Pit is a Mancala" in {
+          !controller.checkMove(mancalaPit)
+        }
+        val farPit = Board.SIDE_LENGTH * board.players.size + 5
+        "the chosen Pit is out of bounds" in {
+          !controller.checkMove(farPit)
+        }
+        val notMyPit = Board.SIDE_LENGTH + Board.SIDE_LENGTH / 2
+        "the chosen Pit does not belong to the current Player" in {
+          !controller.checkMove(notMyPit)
+        }
+      }
+      "and " when {
+      val oldPlayer = controller.currPlayer
+      "performing a move should have switched the current Player" in {
+        controller.move(3)
+        val newPlayer = controller.currPlayer
+        newPlayer should not be oldPlayer
+      }
+    }}
   }
 }

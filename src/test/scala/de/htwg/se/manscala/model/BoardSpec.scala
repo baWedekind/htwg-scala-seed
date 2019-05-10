@@ -54,16 +54,5 @@ class BoardSpec extends WordSpec with Matchers {
         board.pits((chosenPit + j) % pits.size).stones shouldBe prevStonesList(j - 1) + 1
       }
     }
-    "or refuse the move unsuccessfully" when {
-      val mancalaPit = 7
-
-      "the chosen Pit is a Mancala" in {
-        !board.move(mancalaPit)
-      }
-      val farPit = Board.SIDE_LENGTH * board.players.size + 5
-      "the chosen Pit is out of bounds" in {
-        !board.move(farPit)
-      }
-    }
   }}
 }
