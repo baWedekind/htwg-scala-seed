@@ -1,10 +1,10 @@
-package de.htwg.se.manscala.view
+package de.htwg.se.manscala.aview
 
-import de.htwg.se.manscala.model.{Board,Pit,Player}
+import de.htwg.se.manscala.controller.Controller
 
 class Tui {
 
-  def processInputLine(input: String, board:Board) {
+  def processInputLine(input: String, controller: Controller) {
     val int = """(\d+)""".r
     input match {
       case "q" => ()
@@ -15,7 +15,9 @@ class Tui {
 //        if (success) println("Puzzle solved")else println("This puzzle could not be solved!")
 //        solvedGrid
       case int(x) => {
-          board.move(x.toString.toInt)
+          if (!controller.move(x.toString.toInt)) {
+            println("please choose a valid pit")
+          }
       }
       case _ => println("please choose a valid pit")
     }

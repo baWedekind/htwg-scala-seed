@@ -1,27 +1,15 @@
 package de.htwg.se.manscala
 
-import java.util.Scanner
-
 import de.htwg.se.manscala.model.{Board, Pit, Player}
-import de.htwg.se.manscala.view.Tui
+import de.htwg.se.manscala.controller.Controller
+import de.htwg.se.manscala.aview.Tui
 
 import scala.io.StdIn.readLine
 
 object Manscala {
-  val p1 = Player("A")
-  val p2 = Player("B")
-  val pitTypeDefaultP1 = Pit(Pit.PIT_SIZE, isMancala = false, p1)
-  val pitTypeDefaultP2 = Pit(Pit.PIT_SIZE, isMancala = false, p2)
-  val pits = List(pitTypeDefaultP1.copy(), pitTypeDefaultP1.copy(),
-    pitTypeDefaultP1.copy(), pitTypeDefaultP1.copy(),
-    pitTypeDefaultP1.copy(), pitTypeDefaultP1.copy(),
-    Pit(0, isMancala = true, p1),
-    pitTypeDefaultP2.copy(), pitTypeDefaultP2.copy(),
-    pitTypeDefaultP2.copy(), pitTypeDefaultP2.copy(),
-    pitTypeDefaultP2.copy(), pitTypeDefaultP2.copy(),
-    Pit(0, isMancala = true, p2))
-  val board = Board(List(p1, p2), pits)
+  val board: Board = new Board()
   val tui = new Tui
+  val controller = new Controller(board)
 
   def main(args: Array[String]): Unit = {
     val pitSize = Pit.PIT_SIZE
@@ -31,7 +19,7 @@ object Manscala {
     do {
       println("Board : " + board.toString)
       input = readLine()
-      tui.processInputLine(input, board)
+      tui.processInputLine(input, controller)
     } while (input != "q")
 
 //    println("Player 1, What is your name?")
