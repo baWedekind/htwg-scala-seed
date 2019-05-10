@@ -35,29 +35,20 @@ case class Board(players: List[Player], pits: List[Pit]) {
   def this()  = this(List(Board.default_p1, Board.default_p2), Board.DEFAULT_PITS)
 
   /**
-    * moves pebbles according to player's choice of pit, after legality is checked.
+    * moves pebbles according to player's choice of pit.
     * @param chosenPit, an int representing the current player's choice.
-    * @return true on successful completion, false if the move is illegal.
+    * @return true if player switch should happen.
     */
   def move(chosenPit: Int): Boolean = {
-    // i / 7 = player: whole div [0,6] = 7, [7,13]=1 etc
-    val playerChosen = chosenPit / Board.SIDE_LENGTH
+    // i / 7 = player: whole div [0,6] = 0, [7,13]=1 etc
     var stones = 0
-    // was chosen pit in range and not a mancala (playerpit)
-    // TODO: player may only chose own pits!
-    if (chosenPit >= 0 && chosenPit < numPlayers * Board.SIDE_LENGTH &&
-      !pits(chosenPit).isMancala) {
-      stones = pits(chosenPit).emptyPit()
-    } else {
-      // illegal number chosen
-      return false
-    }
-
+    stones = pits(chosenPit).emptyPit()
     for(j <- 1 to stones) {
       // (chosenPit +j) / pits.size should be 0
       pits((chosenPit + j) % pits.size).incr()
     }
-    true
+    (chosenPit + stones % pits.size) / Board.SIDE_LENGTH !=
+      chosenPit / Board.SIDE_LENGTH
   }
 
   override def toString:String = {

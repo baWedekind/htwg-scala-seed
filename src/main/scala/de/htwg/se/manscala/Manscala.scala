@@ -9,7 +9,7 @@ import scala.io.StdIn.readLine
 object Manscala {
   val board: Board = new Board()
   val tui = new Tui
-  val controller = new Controller(board, board.players.head.copy())
+  val controller = new Controller(board, board.players.head.id)
 
   def main(args: Array[String]): Unit = {
     val pitSize = Pit.PIT_SIZE
