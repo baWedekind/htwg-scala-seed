@@ -6,14 +6,16 @@ package de.htwg.se.manscala.model
   */
 object Board {
   val SIDE_LENGTH: Int = 7
-  val DEFAULT_PITS = List(new Pit("A"), new Pit("A"),
-    new Pit("A"), new Pit("A"),
-    new Pit("A"), new Pit("A"),
-    Pit(0, isMancala = true, Player("A")),
-    new Pit("B"), new Pit("B"),
-    new Pit("B"), new Pit("B"),
-    new Pit("B"), new Pit("B"),
-    Pit(0, isMancala = true, Player("B")))
+  private val default_p1 = Player("A", 0)
+  private val default_p2 = Player("B", 1)
+  val DEFAULT_PITS = List(new Pit(default_p1), new Pit(default_p1),
+    new Pit(default_p1), new Pit(default_p1),
+    new Pit(default_p1), new Pit(default_p1),
+    Pit(0, isMancala = true, default_p1),
+    new Pit(default_p2), new Pit(default_p2),
+    new Pit(default_p2), new Pit(default_p2),
+    new Pit(default_p2), new Pit(default_p2),
+    Pit(0, isMancala = true, default_p2))
 }
 
 /**
@@ -30,7 +32,7 @@ case class Board(players: List[Player], pits: List[Pit]) {
     * default constructor
     * @return a default Board with players A, B and 7 pits with Pit.PIT_SIZE stones per non mancala pit
     */
-  def this()  = this(List(Player("A"), Player("B")), Board.DEFAULT_PITS)
+  def this()  = this(List(Board.default_p1, Board.default_p2), Board.DEFAULT_PITS)
 
   /**
     * moves pebbles according to player's choice of pit, after legality is checked.

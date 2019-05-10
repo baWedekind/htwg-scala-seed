@@ -7,7 +7,7 @@ object Pit {
 }
 
 case class Pit(var stones: Int, isMancala: Boolean, owner: Player) {
-  def this(pl: String) = this(Pit.PIT_SIZE, isMancala = false, Player(pl))
+  def this(pl: Player) = this(Pit.PIT_SIZE, isMancala = false, pl)
 
   def incr(): Unit = {
     this.stones += 1
