@@ -1,6 +1,6 @@
 package de.htwg.se.manscala.controller
 
-import de.htwg.se.manscala.model.{Board, Pit, Player}
+import de.htwg.se.manscala.model.{Board, MancalaPit, Pit, Player}
 import de.htwg.se.manscala.util.Observable
 
 class Controller(var board: Board, var currPlayer: Int) extends Observable {
@@ -35,7 +35,8 @@ class Controller(var board: Board, var currPlayer: Int) extends Observable {
   def checkMove(chosenPit: Int): Boolean = {
     if (chosenPit / Board.SIDE_LENGTH != currPlayer) {
       false
-    } else if (!(chosenPit >= 0 && chosenPit < board.numPlayers * Board.SIDE_LENGTH) || board.pits(chosenPit).isMancala) {
+    } else if (!(chosenPit >= 0 && chosenPit < board.numPlayers * Board.SIDE_LENGTH) ||
+      board.pits(chosenPit).isInstanceOf[MancalaPit]) {
       false
     } else {
       true
