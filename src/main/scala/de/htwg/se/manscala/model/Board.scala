@@ -1,28 +1,34 @@
 package de.htwg.se.manscala.model
 
+import de.htwg.se.manscala.model.Board.{default_p1, default_p2}
+
 /**
   * Board is a companion object for case class Board @see {Board}
+  *
   * @member sideLength an Int with how many Pits each player owns.
   */
 object Board {
   val SIDE_LENGTH: Int = 7
   private val default_p1 = Player("A", 0)
   private val default_p2 = Player("B", 1)
-  val DEFAULT_PITS = List(new Pit(default_p1), new Pit(default_p1),
-    new Pit(default_p1), new Pit(default_p1),
-    new Pit(default_p1), new Pit(default_p1),
-    Pit(0, isMancala = true, default_p1),
-    new Pit(default_p2), new Pit(default_p2),
-    new Pit(default_p2), new Pit(default_p2),
-    new Pit(default_p2), new Pit(default_p2),
-    Pit(0, isMancala = true, default_p2))
+  val DEFAULT_PITS = List(
+    Pit.apply(isMancala = false, default_p1), Pit.apply(isMancala = false, default_p1),
+    Pit.apply(isMancala = false, default_p1), Pit.apply(isMancala = false, default_p1),
+    Pit.apply(isMancala = false, default_p1), Pit.apply(isMancala = false, default_p1),
+    Pit.apply(isMancala = true, default_p1),
+    Pit.apply(isMancala = false, default_p2), Pit.apply(isMancala = false, default_p2),
+    Pit.apply(isMancala = false, default_p2), Pit.apply(isMancala = false, default_p2),
+    Pit.apply(isMancala = false, default_p2), Pit.apply(isMancala = false, default_p2),
+    Pit.apply(isMancala = true, default_p2))
 }
 
 /**
   * Board should have a list of players and a list of pits
-  * Use the above in BoardSpec later
+  * The default value copies the DEFAULT_PITS prototype, the case class also providing a scala version of a Builder
+  * pattern
   */
-case class Board(players: List[Player], pits: List[Pit]) {
+case class Board(players: List[Player],
+                 pits: List[Pit] = Board.DEFAULT_PITS.map(x => Pit.apply(x.isInstanceOf[MancalaPit], x.owner))) {
   val numPlayers: Int = players.size
   if (numPlayers % 2 != 0) {
     throw new IllegalArgumentException("Number of Players must be even. Given: " + numPlayers)
@@ -32,23 +38,38 @@ case class Board(players: List[Player], pits: List[Pit]) {
     * default constructor
     * @return a default Board with players A, B and 7 pits with Pit.PIT_SIZE stones per non mancala pit
     */
-  def this()  = this(List(Board.default_p1, Board.default_p2), Board.DEFAULT_PITS)
+  def this() = this(List(Board.default_p1, Board.default_p2))
 
   /**
     * moves pebbles according to player's choice of pit.
     * @param chosenPit, an int representing the current player's choice.
-    * @return true if player switch should happen.
+    * @return (Boolean, Int) true if player switch should happen, the amount of stones in chosenPit.
     */
-  def move(chosenPit: Int): Boolean = {
+  def move(chosenPit: Int): (Boolean, Int) = {
     // i / 7 = player: whole div [0,6] = 0, [7,13]=1 etc
     var stones = 0
-    stones = pits(chosenPit).emptyPit()
+    stones = pits(chosenPit).asInstanceOf[NormalPit].emptyPit()
     for(j <- 1 to stones) {
       // (chosenPit +j) / pits.size should be 0
       pits((chosenPit + j) % pits.size).incr()
     }
-    (chosenPit + stones % pits.size) / Board.SIDE_LENGTH !=
-      chosenPit / Board.SIDE_LENGTH
+    ((chosenPit + stones % pits.size) / Board.SIDE_LENGTH !=
+      chosenPit / Board.SIDE_LENGTH, stones)
+  }
+
+  /**
+    * Undoes a move based on what the chosenPit was, and how many stones were returned from it.
+    * Only call from UndoManager, or other situations where you know this is legal
+    * @param chosenPit, an Int representing the Player's choice
+    * @param stones, an Int for the amount of stones to replace
+    */
+  def reverseMove(chosenPit: Int, stones: Int):Unit = {
+    for(j <- stones to 1 by -1) {
+      // (chosenPit +j) / pits.size should be 0
+      pits((chosenPit + j) % pits.size).decr()
+    }
+    // Replace the stones in chosenPit
+    pits(chosenPit).stones = stones
   }
 
   override def toString:String = {
