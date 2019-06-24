@@ -3,17 +3,26 @@ package de.htwg.se.manscala.model
 import de.htwg.se.manscala.model.Player
 
 trait Pit {
+
+  def copy(): Pit
+
   val owner: Player
   var stones: Int
 
   def incr(): Unit = {
     this.stones += 1
   }
+
+  def decr(): Unit = {
+    this.stones -= 1
+  }
 }
 
 
 object Pit {
-  // TODO: create apply method for factory style action
+  /**
+    * Apply method for factory style action.
+    */
   def apply(isMancala: Boolean, pl: Player): Pit = if (isMancala) {
     new MancalaPit(pl)
   } else {
@@ -34,10 +43,13 @@ case class NormalPit(var stones: Int = Pit.PIT_SIZE, owner: Player) extends Pit 
 
   override def toString:String = "(" + this.stones + ")"
 
+  override def copy(): NormalPit = NormalPit(this.stones, this.owner)
 }
 
 case class MancalaPit(var stones: Int = Pit.PIT_SIZE, owner: Player) extends Pit {
   def this(pl: Player) = this(0, pl)
 
   override def toString:String = "([" + this.stones + "])"
+
+  override def copy(): MancalaPit = MancalaPit(this.stones, this.owner)
 }

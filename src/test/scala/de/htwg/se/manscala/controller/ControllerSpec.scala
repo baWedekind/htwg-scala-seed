@@ -12,7 +12,7 @@ class ControllerSpec extends WordSpec with Matchers {
   "A Controller"  when {
     "new" should {
       val board = new Board()
-      val controller = new Controller(board, board.players.head.id)
+      val controller = new Controller(new UndoManager, board, board.players.head.id)
       "have a Board" in {
         controller.board shouldBe a[Board]
       }
@@ -44,11 +44,19 @@ class ControllerSpec extends WordSpec with Matchers {
         }
       }
       "and " when {
-      val oldPlayer = controller.currPlayer
-      "performing a move should have switched the current Player" in {
-        controller.move(3)
-        val newPlayer = controller.currPlayer
-        newPlayer should not be oldPlayer
+        val oldPlayer = controller.currPlayer
+        "performing a move should have switched the current Player" in {
+          controller.move(3)
+          val newPlayer = controller.currPlayer
+          newPlayer should not be oldPlayer
+        }
+      "and" when {
+        val switcher = new Controller(new UndoManager, board, board.numPlayers - 1)
+        switcher.currPlayer = board.numPlayers - 1
+        switcher.switchPlayer()
+        "should loop around to the first player" in {
+          switcher.currPlayer shouldBe 0
+        }
       }
     }}
   }

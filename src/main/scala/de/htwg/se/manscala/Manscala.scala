@@ -1,15 +1,15 @@
 package de.htwg.se.manscala
 
 import de.htwg.se.manscala.model.{Board, Pit, Player}
-import de.htwg.se.manscala.controller.Controller
+import de.htwg.se.manscala.controller.{Controller, UndoManager}
 import de.htwg.se.manscala.aview.Tui
 
 import scala.io.StdIn.readLine
 
 object Manscala {
-  val board: Board = new Board()
+  var board: Board = new Board()
   val tui = new Tui
-  val controller = new Controller(board, board.players.head.id)
+  val controller = new Controller(new UndoManager, board, board.players.head.id)
 
   def main(args: Array[String]): Unit = {
     val pitSize = Pit.PIT_SIZE
@@ -17,7 +17,7 @@ object Manscala {
     var input: String = ""
 
     do {
-      println("Board : " + board.toString)
+      println("Board : " + controller.board.toString)
       input = readLine()
       tui.processInputLine(input, controller)
     } while (input != "q")

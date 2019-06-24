@@ -27,6 +27,12 @@ class PitSpec extends WordSpec with Matchers {
     "have a nice String representation" in {
       pit.toString should be("(" + pit.stones + ")")
     }
+//    "and" when { "cloned" should {
+//      val clonedPit = pit.clone()
+//      "return an exact copy of itself" in {
+//        clonedPit. should be pit
+//      }
+//    }}
   }}
   "A Pit" when { "incremented" should {
     val player = Player("Test Player", 0)
