@@ -1,5 +1,6 @@
 import de.htwg.se.manscala.model.Pit.PIT_SIZE
-import de.htwg.se.manscala.model.{Board, Pit, Player}
+import de.htwg.se.manscala.model.Pit
+import de.htwg.se.manscala.model.boardComponent.boardReverseImpl.Board
 
 case class Cell(x:Int, y:Int)
 

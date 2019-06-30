@@ -1,9 +1,15 @@
 package de.htwg.se.manscala.controller
 
-import de.htwg.se.manscala.model.{Board, MancalaPit, Pit, Player}
+import de.htwg.se.manscala.model.boardComponent.boardReverseImpl.Board
+import de.htwg.se.manscala.model.pitComponent.pitMancalaImpl.MancalaPit
+import de.htwg.se.manscala.model.playerComponent.Player
 import de.htwg.se.manscala.util.Observable
 
 class Controller(val undoManager: UndoManager, var board: Board, var currPlayer: Int) extends Observable {
+  private var notifier = ""
+
+  def getNotifier():String = this.notifier
+
   def switchPlayer(): Unit = {
     if (currPlayer == board.numPlayers - 1) {
       currPlayer = 0
@@ -24,7 +30,14 @@ class Controller(val undoManager: UndoManager, var board: Board, var currPlayer:
   def boardToString: String = board.toString
 
   def executeCommand(command: Command): Boolean = {
-    undoManager.doStep(command)
+    val success = undoManager.doStep(command)
+    if (!success) {
+      this.notifier = "Please choose a valid Pit"
+    } else {
+      this.notifier = ""
+    }
+    notifyObservers()
+    success
   }
 
   // I could use a Strategy pattern to make an "AI" choose moves
@@ -41,7 +54,6 @@ class Controller(val undoManager: UndoManager, var board: Board, var currPlayer:
     }
   }
 
-  //TODO: Implement a Command pattern with and undo and redo stack
   def checkMove(chosenPit: Int): Boolean = {
     if (chosenPit / Board.SIDE_LENGTH != currPlayer) {
       false

@@ -1,6 +1,7 @@
 package de.htwg.se.manscala.controller
 
-import de.htwg.se.manscala.model.{Board, Pit, Player}
+import de.htwg.se.manscala.model.boardComponent.boardReverseImpl.Board
+import de.htwg.se.manscala.model.playerComponent.Player
 
 class MoveCommand(chosenPit: Int, var board: Board, var savedStones: Int, player: Player, controller: Controller) extends Command {
   override def doStep() : Boolean = {

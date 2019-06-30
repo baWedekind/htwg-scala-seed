@@ -1,7 +1,7 @@
 package de.htwg.se.manscala.controller
 
-import de.htwg.se.manscala.model.{Board, Player}
-
+import de.htwg.se.manscala.model.boardComponent.boardReverseImpl.Board
+import de.htwg.se.manscala.model.playerComponent.Player
 import org.scalatest._
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
