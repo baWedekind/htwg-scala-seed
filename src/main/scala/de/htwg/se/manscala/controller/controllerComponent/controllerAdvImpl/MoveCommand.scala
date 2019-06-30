@@ -1,5 +1,6 @@
-package de.htwg.se.manscala.controller
+package de.htwg.se.manscala.controller.controllerComponent.controllerAdvImpl
 
+import de.htwg.se.manscala.controller.controllerComponent.Command
 import de.htwg.se.manscala.model.boardComponent.boardReverseImpl.Board
 import de.htwg.se.manscala.model.playerComponent.Player
 

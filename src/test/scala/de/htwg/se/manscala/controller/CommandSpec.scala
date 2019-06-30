@@ -1,5 +1,6 @@
 package de.htwg.se.manscala.controller
 
+import de.htwg.se.manscala.controller.controllerComponent.Command
 import org.scalatest._
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner

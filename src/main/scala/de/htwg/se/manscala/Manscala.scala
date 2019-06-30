@@ -1,9 +1,10 @@
 package de.htwg.se.manscala
 
-import de.htwg.se.manscala.controller.{Controller, UndoManager}
 import de.htwg.se.manscala.aview.{Gui, Tui}
+import de.htwg.se.manscala.controller.controllerComponent.controllerAdvImpl.Controller
 import de.htwg.se.manscala.model.boardComponent.boardReverseImpl.Board
 import de.htwg.se.manscala.model.pitComponent.Pit
+import de.htwg.se.manscala.util.UndoManager
 
 import scala.io.StdIn.readLine
 

@@ -1,7 +1,9 @@
 package de.htwg.se.manscala.controller
 
+import de.htwg.se.manscala.controller.controllerComponent.controllerAdvImpl.Controller
 import de.htwg.se.manscala.model.boardComponent.boardReverseImpl.Board
 import de.htwg.se.manscala.model.playerComponent.Player
+import de.htwg.se.manscala.util.UndoManager
 import org.scalatest._
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner

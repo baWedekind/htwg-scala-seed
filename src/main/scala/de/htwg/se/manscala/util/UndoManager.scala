@@ -1,6 +1,6 @@
-package de.htwg.se.manscala.controller
+package de.htwg.se.manscala.util
 
-import scala.util.Try
+import de.htwg.se.manscala.controller.controllerComponent.Command
 
 class UndoManager {
   private var undoStack: List[Option[Command]] = List(None)

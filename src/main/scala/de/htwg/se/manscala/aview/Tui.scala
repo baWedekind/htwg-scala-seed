@@ -1,7 +1,7 @@
 package de.htwg.se.manscala.aview
 
-import de.htwg.se.manscala.controller.{Command, Controller, MoveCommand}
-import de.htwg.se.manscala.model.boardComponent.boardReverseImpl.Board
+import de.htwg.se.manscala.controller.controllerComponent.controllerAdvImpl.{Controller, MoveCommand}
+import de.htwg.se.manscala.controller.controllerComponent.Command
 import de.htwg.se.manscala.util.Observer
 
 class Tui(controller: Controller) extends Observer {

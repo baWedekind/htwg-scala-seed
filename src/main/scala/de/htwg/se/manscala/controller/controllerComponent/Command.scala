@@ -1,4 +1,4 @@
-package de.htwg.se.manscala.controller
+package de.htwg.se.manscala.controller.controllerComponent
 
 trait Command {
   def doStep(): Boolean

@@ -2,12 +2,11 @@ package de.htwg.se.manscala.aview
 
 import java.awt.{Color, Font}
 
-import de.htwg.se.manscala.controller.Controller
-
 import scala.language.postfixOps
 import scala.swing._
 import scala.swing.event._
 import de.htwg.se.manscala.controller._
+import de.htwg.se.manscala.controller.controllerComponent.controllerAdvImpl.{Controller, MoveCommand}
 import de.htwg.se.manscala.model.boardComponent.boardReverseImpl.Board
 import de.htwg.se.manscala.util.Observer
 
