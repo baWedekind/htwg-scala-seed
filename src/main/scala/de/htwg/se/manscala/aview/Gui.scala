@@ -2,25 +2,25 @@ package de.htwg.se.manscala.aview
 
 import java.awt.{Color, Font}
 
+import de.htwg.se.manscala.controller.controllerComponent.{Command, ControllerInterface}
+
 import scala.language.postfixOps
 import scala.swing._
 import scala.swing.event._
-import de.htwg.se.manscala.controller._
-import de.htwg.se.manscala.controller.controllerComponent.controllerAdvImpl.{Controller, MoveCommand}
-import de.htwg.se.manscala.model.boardComponent.boardReverseImpl.Board
+import de.htwg.se.manscala.model.boardComponent.BoardInterface
 import de.htwg.se.manscala.util.Observer
 
-class Gui(controller: Controller) extends Frame with Observer {
+class Gui(controller: ControllerInterface) extends Frame with Observer {
 
   controller.add(this)
 
   val height = 800
   val width = 1400
-  val row: Int = controller.board.numPlayers
-  val col: Int = Board.SIDE_LENGTH
-  var str = "It is " + controller.getCurrentPlayer() + "'s turn"
+  val row: Int = controller.board.getNumPlayers()
+  val col: Int = BoardInterface.SIDE_LENGTH
+  var str: String = "It is " + controller.getCurrentPlayer() + "'s turn"
 
-  var guiPits = Array.ofDim[GuiPit](row, col)
+  var guiPits: Array[Array[GuiPit]] = Array.ofDim[GuiPit](row, col)
 
   title = "Mancala"
   preferredSize = new Dimension(width, height)
@@ -115,7 +115,7 @@ class Gui(controller: Controller) extends Frame with Observer {
       for (y <- 0 until col) {
         guiPits(x)(y) = new GuiPit(new Point(x, y))
         guiPits(x)(y).background = getPlayerColor(controller.board.numPlayers - x - 1)
-        guiPits(x)(y).text = controller.board.pits(positionToArray(x, y)).toString()
+        guiPits(x)(y).text = controller.board.getPits()(positionToArray(x, y)).toString()
         guiPits(x)(y).font = new Font("Arial", 0, 50)
       }
     }
@@ -160,8 +160,8 @@ class Gui(controller: Controller) extends Frame with Observer {
     } guiPits(x)(y).reactions += {
       case b: ButtonClicked => {
         val chosenPit = positionToArray(x, y)
-        val comma = new MoveCommand(chosenPit, controller.board, 0,
-          controller.getCurrentPlayer(), controller)
+        val comma = Command.apply(chosenPit, controller.board, 0,
+          controller.getCurrentPlayer(), controller, "move")
         controller.executeCommand(comma)
       }
     }
@@ -225,11 +225,11 @@ class Gui(controller: Controller) extends Frame with Observer {
     * @return a Tuple with x y position
     */
   private def arrayToPosition(i: Int): (Int, Int) = {
-    if (i < Board.SIDE_LENGTH) {
+    if (i < BoardInterface.SIDE_LENGTH) {
       (1, i)
     } else {
       // first row, collumn [7,13] -> [6,0]; 7 - (1+0*2) = 6; 10 -(1+2*3) = 3;13-(1+2*6) = 0;
-      ( 0, i - (1 + 2 * (i - Board.SIDE_LENGTH)) )
+      ( 0, i - (1 + 2 * (i - BoardInterface.SIDE_LENGTH)) )
     }
   }
 
@@ -241,7 +241,7 @@ class Gui(controller: Controller) extends Frame with Observer {
     */
   private def positionToArray(x: Int, y: Int): Int = {
     if (x == 0) {
-      y + ( 1 + 2 * (Board.SIDE_LENGTH - y - 1))
+      y + ( 1 + 2 * (BoardInterface.SIDE_LENGTH - y - 1))
     } else {
       y
     }

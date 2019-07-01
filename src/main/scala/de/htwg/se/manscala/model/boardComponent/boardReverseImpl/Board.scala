@@ -4,7 +4,7 @@ import de.htwg.se.manscala.model.boardComponent.BoardInterface
 import de.htwg.se.manscala.model.pitComponent.pitNormalImpl.NormalPit
 import de.htwg.se.manscala.model.pitComponent.Pit
 import de.htwg.se.manscala.model.pitComponent.pitMancalaImpl.MancalaPit
-import de.htwg.se.manscala.model.playerComponent.Player
+import de.htwg.se.manscala.model.playerComponent.PlayerInterface
 
 /**
   * Board is a companion object for case class Board @see {Board}
@@ -13,8 +13,8 @@ import de.htwg.se.manscala.model.playerComponent.Player
   */
 object Board {
   val SIDE_LENGTH: Int = 7
-  private val default_p1 = Player("A", 0)
-  private val default_p2 = Player("B", 1)
+  private val default_p1 = PlayerInterface.apply("A", 0)
+  private val default_p2 = PlayerInterface.apply("B", 1)
   val DEFAULT_PITS = List(
     Pit.apply(isMancala = false, default_p1), Pit.apply(isMancala = false, default_p1),
     Pit.apply(isMancala = false, default_p1), Pit.apply(isMancala = false, default_p1),
@@ -32,9 +32,10 @@ object Board {
   * The default value copies the DEFAULT_PITS prototype, the case class also providing a scala version of a Builder
   * pattern
   */
-case class Board(players: List[Player],
+case class Board(players: List[PlayerInterface],
                  pits: List[Pit] = Board.DEFAULT_PITS.map(x => Pit.apply(x.isInstanceOf[MancalaPit], x.owner))) extends BoardInterface {
   override val numPlayers: Int = players.size
+  private val sideLength = 7
   if (numPlayers % 2 != 0) {
     throw new IllegalArgumentException("Number of Players must be even. Given: " + numPlayers)
   }
@@ -44,6 +45,16 @@ case class Board(players: List[Player],
     * @return a default Board with players A, B and 7 pits with Pit.PIT_SIZE stones per non mancala pit
     */
   def this() = this(List(Board.default_p1, Board.default_p2))
+
+  override def getPlayers(): List[PlayerInterface] = this.players
+
+  /**
+    * A getter for the Pit List
+    * @return this.pits
+    */
+  override def getPits(): List[Pit] = this.pits
+
+  override def getNumPlayers(): Int = this.numPlayers
 
   /**
     * moves pebbles according to player's choice of pit.
@@ -85,4 +96,5 @@ case class Board(players: List[Player],
     }
     buildString.append("}").toString()
   }
+
 }

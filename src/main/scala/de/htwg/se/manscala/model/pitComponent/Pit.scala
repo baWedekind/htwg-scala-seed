@@ -2,13 +2,13 @@ package de.htwg.se.manscala.model.pitComponent
 
 import de.htwg.se.manscala.model.pitComponent.pitMancalaImpl.MancalaPit
 import de.htwg.se.manscala.model.pitComponent.pitNormalImpl.NormalPit
-import de.htwg.se.manscala.model.playerComponent.Player
+import de.htwg.se.manscala.model.playerComponent.PlayerInterface
 
 trait Pit {
 
   def copy(): Pit
 
-  val owner: Player
+  val owner: PlayerInterface
   var stones: Int
 
   def incr(): Unit = {
@@ -24,7 +24,7 @@ object Pit {
   /**
     * Apply method for factory style action.
     */
-  def apply(isMancala: Boolean, pl: Player): Pit = if (isMancala) {
+  def apply(isMancala: Boolean, pl: PlayerInterface): Pit = if (isMancala) {
     new MancalaPit(pl)
   } else {
     new NormalPit(pl)

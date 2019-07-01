@@ -1,10 +1,13 @@
 package de.htwg.se.manscala.controller.controllerComponent.controllerAdvImpl
 
-import de.htwg.se.manscala.controller.controllerComponent.Command
+import de.htwg.se.manscala.controller.controllerComponent.{Command, ControllerInterface}
+import de.htwg.se.manscala.model.boardComponent.BoardInterface
 import de.htwg.se.manscala.model.boardComponent.boardReverseImpl.Board
-import de.htwg.se.manscala.model.playerComponent.Player
+import de.htwg.se.manscala.model.playerComponent.PlayerInterface
+import de.htwg.se.manscala.model.playerComponent.playerImpl.Player
 
-class MoveCommand(chosenPit: Int, var board: Board, var savedStones: Int, player: Player, controller: Controller) extends Command {
+class MoveCommand(chosenPit: Int, var board: BoardInterface, var savedStones: Int, player: PlayerInterface,
+                  controller: ControllerInterface) extends Command {
   override def doStep() : Boolean = {
     if (!controller.checkMove(chosenPit)) {
       false
@@ -22,7 +25,7 @@ class MoveCommand(chosenPit: Int, var board: Board, var savedStones: Int, player
 
   override def undoStep() : Unit = {
     this.board.reverseMove(this.chosenPit, this.savedStones)
-    this.controller.currPlayer = player.id
+    this.controller.currPlayer = player.getId()
 //    controller.board = savedBoard
     controller.notifyObservers()
   }

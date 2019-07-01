@@ -2,7 +2,7 @@ package de.htwg.se.manscala.model
 
 import de.htwg.se.manscala.model.pitComponent.Pit
 import de.htwg.se.manscala.model.pitComponent.pitNormalImpl.NormalPit
-import de.htwg.se.manscala.model.playerComponent.Player
+import de.htwg.se.manscala.model.playerComponent.playerImpl.Player
 import org.scalatest._
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner

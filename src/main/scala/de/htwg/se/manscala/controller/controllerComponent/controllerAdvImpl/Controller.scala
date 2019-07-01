@@ -1,15 +1,16 @@
 package de.htwg.se.manscala.controller.controllerComponent.controllerAdvImpl
 
 import de.htwg.se.manscala.controller.controllerComponent.{Command, ControllerInterface}
-import de.htwg.se.manscala.model.boardComponent.boardReverseImpl.Board
+import de.htwg.se.manscala.model.boardComponent.BoardInterface
 import de.htwg.se.manscala.model.pitComponent.pitMancalaImpl.MancalaPit
-import de.htwg.se.manscala.model.playerComponent.Player
+import de.htwg.se.manscala.model.playerComponent.PlayerInterface
 import de.htwg.se.manscala.util.{Observable, UndoManager}
 
-class Controller(val undoManager: UndoManager, var board: Board, var currPlayer: Int) extends Observable with ControllerInterface {
+class Controller(val undoManager: UndoManager, var board: BoardInterface, var currPlayer: Int) extends Observable with
+  ControllerInterface {
   private var notifier = ""
 
-  override def getNotifier():String = this.notifier
+  override def getNotifier(): String = this.notifier
 
   override def switchPlayer(): Unit = {
     if (currPlayer == board.numPlayers - 1) {
@@ -19,12 +20,13 @@ class Controller(val undoManager: UndoManager, var board: Board, var currPlayer:
     }
   }
 
-  override def getCurrentPlayer(): Player = {
-    this.board.players.filter(p => p.id == currPlayer).head
+  override def getCurrentPlayer(): PlayerInterface = {
+    this.board.getPlayers().filter(p => p.getId() == currPlayer).head
   }
 
-  override def createDefaultBoard():Unit = {
-    board = new Board()
+  override def createDefaultBoard(): Unit = {
+    // Create a default Board
+    board = BoardInterface.apply(Nil, Nil, "default")
     notifyObservers()
   }
 
@@ -56,13 +58,20 @@ class Controller(val undoManager: UndoManager, var board: Board, var currPlayer:
   }
 
   override def checkMove(chosenPit: Int): Boolean = {
-    if (chosenPit / Board.SIDE_LENGTH != currPlayer) {
+    if (chosenPit / BoardInterface.SIDE_LENGTH != currPlayer) {
       false
-    } else if (!(chosenPit >= 0 && chosenPit < board.numPlayers * Board.SIDE_LENGTH) ||
+    } else if (!(chosenPit >= 0 && chosenPit < board.numPlayers * BoardInterface.SIDE_LENGTH) ||
       board.pits(chosenPit).isInstanceOf[MancalaPit]) {
       false
     } else {
       true
     }
+  }
+
+  /**
+    * a setter for the current Player (Int)
+    */
+  override def setCurrentPlayer(id: Int): Unit = {
+    this.currPlayer = id
   }
 }
