@@ -1,11 +1,13 @@
 package de.htwg.se.manscala.aview
 
-import de.htwg.se.manscala.controller.{Command, Controller, MoveCommand}
-import de.htwg.se.manscala.model.Board
+import de.htwg.se.manscala.controller.controllerComponent.{Command, ControllerInterface}
+import de.htwg.se.manscala.util.Observer
 
-class Tui {
+class Tui(controller: ControllerInterface) extends Observer {
 
-  def processInputLine(input: String, controller: Controller) {
+  controller.add(this)
+
+  def processInputLine(input: String) {
     val int = """(\d+)""".r
     input match {
       case "q" => ()
@@ -16,13 +18,15 @@ class Tui {
 //        if (success) println("Puzzle solved")else println("This puzzle could not be solved!")
 //        solvedGrid
       case int(x) => {
-        val Commalomadommadomm: Command = new MoveCommand(x.toInt, controller.board, 0,
-          controller.getCurrentPlayer(), controller)
-        if (!controller.executeCommand(Commalomadommadomm)) {
-          println("please choose a valid pit")
-        }
+        val Commalomadommadomm: Command = Command.apply(x.toInt, controller.board, 0,
+          controller.getCurrentPlayer(), controller, "move")
+        controller.executeCommand(Commalomadommadomm)
       }
       case _ => println("please choose a valid pit")
     }
+  }
+
+  override def update(): Unit = {
+    println(controller.getNotifier() + " " + controller.board)
   }
 }

@@ -1,5 +1,7 @@
 package de.htwg.se.manscala.model
 
+import de.htwg.se.manscala.model.boardComponent.boardReverseImpl.Board
+import de.htwg.se.manscala.model.playerComponent.playerImpl.Player
 import org.scalatest._
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
@@ -22,7 +24,7 @@ class BoardSpec extends WordSpec with Matchers {
     "or " when { "new with uneven Players" should {
       val p3 = Player("Test three", 2)
       "Throw an IllegalArgumentException" in {
-        an[IllegalArgumentException] should be thrownBy Board(List(board.players(0), board.players(1), p3), Board.DEFAULT_PITS)
+        an[IllegalArgumentException] should be thrownBy Board(List(board.players.head, board.players(1), p3), Board.DEFAULT_PITS)
       }
 
     }}
@@ -35,15 +37,25 @@ class BoardSpec extends WordSpec with Matchers {
     for (j <- 1 to numStones) {
       prevStonesList += board.pits((chosenPit + j) % board.pits.size).stones
     }
-    val success = board.move(chosenPit)
     "complete the move successfully" in {
+      val (success, _) = board.move(chosenPit)
       success
     }
     "have incremented the same amount of Pits as Stones returned" in {
+      board.move(chosenPit)
       for (j <- 1 to numStones) {
         // ! Error, errant move happening during iteration !
         board.pits((chosenPit + j) % board.pits.size).stones shouldBe prevStonesList(j - 1) + 1
       }
     }
+    "and" when { "reversing a move " should {
+      "have decremented the right pits" in {//TODO: figure out how to test this
+        val (_, stones) = board.move(chosenPit)
+        board.reverseMove(chosenPit, stones)
+        for(j <- stones % board.pits.size to 1 by -1) {
+          board.pits((chosenPit + j) % board.pits.size).stones shouldBe prevStonesList(j - 1)
+        }
+      }
+    }}
   }}
 }

@@ -1,7 +1,9 @@
 package de.htwg.se.manscala.controller
 
-import de.htwg.se.manscala.model.{Board, Player}
-
+import de.htwg.se.manscala.controller.controllerComponent.controllerAdvImpl.Controller
+import de.htwg.se.manscala.model.boardComponent.BoardInterface
+import de.htwg.se.manscala.model.boardComponent.boardReverseImpl.Board
+import de.htwg.se.manscala.util.UndoManager
 import org.scalatest._
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
@@ -30,15 +32,15 @@ class ControllerSpec extends WordSpec with Matchers {
         controller.checkMove(3)
       }
       "or false" when {
-        val mancalaPit = Board.SIDE_LENGTH
+        val mancalaPit = BoardInterface.SIDE_LENGTH
         "the chosen Pit is a Mancala" in {
           !controller.checkMove(mancalaPit)
         }
-        val farPit = Board.SIDE_LENGTH * board.players.size + 5
+        val farPit = BoardInterface.SIDE_LENGTH * board.players.size + 5
         "the chosen Pit is out of bounds" in {
           !controller.checkMove(farPit)
         }
-        val notMyPit = Board.SIDE_LENGTH + Board.SIDE_LENGTH / 2
+        val notMyPit = BoardInterface.SIDE_LENGTH + BoardInterface.SIDE_LENGTH / 2
         "the chosen Pit does not belong to the current Player" in {
           !controller.checkMove(notMyPit)
         }

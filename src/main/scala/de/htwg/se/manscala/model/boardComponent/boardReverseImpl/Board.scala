@@ -1,6 +1,10 @@
-package de.htwg.se.manscala.model
+package de.htwg.se.manscala.model.boardComponent.boardReverseImpl
 
-import de.htwg.se.manscala.model.Board.{default_p1, default_p2}
+import de.htwg.se.manscala.model.boardComponent.BoardInterface
+import de.htwg.se.manscala.model.pitComponent.pitNormalImpl.NormalPit
+import de.htwg.se.manscala.model.pitComponent.Pit
+import de.htwg.se.manscala.model.pitComponent.pitMancalaImpl.MancalaPit
+import de.htwg.se.manscala.model.playerComponent.PlayerInterface
 
 /**
   * Board is a companion object for case class Board @see {Board}
@@ -9,8 +13,8 @@ import de.htwg.se.manscala.model.Board.{default_p1, default_p2}
   */
 object Board {
   val SIDE_LENGTH: Int = 7
-  private val default_p1 = Player("A", 0)
-  private val default_p2 = Player("B", 1)
+  private val default_p1 = PlayerInterface.apply("A", 0)
+  private val default_p2 = PlayerInterface.apply("B", 1)
   val DEFAULT_PITS = List(
     Pit.apply(isMancala = false, default_p1), Pit.apply(isMancala = false, default_p1),
     Pit.apply(isMancala = false, default_p1), Pit.apply(isMancala = false, default_p1),
@@ -23,13 +27,15 @@ object Board {
 }
 
 /**
-  * Board should have a list of players and a list of pits
+  * Board should have a list of players and a list of pits.
+  * This version of Board expects a side length of six pits and a Mancala per player
   * The default value copies the DEFAULT_PITS prototype, the case class also providing a scala version of a Builder
   * pattern
   */
-case class Board(players: List[Player],
-                 pits: List[Pit] = Board.DEFAULT_PITS.map(x => Pit.apply(x.isInstanceOf[MancalaPit], x.owner))) {
-  val numPlayers: Int = players.size
+case class Board(players: List[PlayerInterface],
+                 pits: List[Pit] = Board.DEFAULT_PITS.map(x => Pit.apply(x.isInstanceOf[MancalaPit], x.owner))) extends BoardInterface {
+  override val numPlayers: Int = players.size
+  private val sideLength = 7
   if (numPlayers % 2 != 0) {
     throw new IllegalArgumentException("Number of Players must be even. Given: " + numPlayers)
   }
@@ -40,12 +46,22 @@ case class Board(players: List[Player],
     */
   def this() = this(List(Board.default_p1, Board.default_p2))
 
+  override def getPlayers(): List[PlayerInterface] = this.players
+
+  /**
+    * A getter for the Pit List
+    * @return this.pits
+    */
+  override def getPits(): List[Pit] = this.pits
+
+  override def getNumPlayers(): Int = this.numPlayers
+
   /**
     * moves pebbles according to player's choice of pit.
     * @param chosenPit, an int representing the current player's choice.
     * @return (Boolean, Int) true if player switch should happen, the amount of stones in chosenPit.
     */
-  def move(chosenPit: Int): (Boolean, Int) = {
+  override def move(chosenPit: Int): (Boolean, Int) = {
     // i / 7 = player: whole div [0,6] = 0, [7,13]=1 etc
     var stones = 0
     stones = pits(chosenPit).asInstanceOf[NormalPit].emptyPit()
@@ -63,9 +79,10 @@ case class Board(players: List[Player],
     * @param chosenPit, an Int representing the Player's choice
     * @param stones, an Int for the amount of stones to replace
     */
-  def reverseMove(chosenPit: Int, stones: Int):Unit = {
+  override def reverseMove(chosenPit: Int, stones: Int):Unit = {
     for(j <- stones to 1 by -1) {
       // (chosenPit +j) / pits.size should be 0
+      println("Decrementing [" + (chosenPit + j) % pits.size + "] with j = " + j )
       pits((chosenPit + j) % pits.size).decr()
     }
     // Replace the stones in chosenPit
@@ -76,8 +93,8 @@ case class Board(players: List[Player],
     val buildString = new StringBuilder("{")
     for (pit <- pits) {
       buildString.append(pit.toString)
-      // TODO: Beautify Board output
     }
     buildString.append("}").toString()
   }
+
 }
