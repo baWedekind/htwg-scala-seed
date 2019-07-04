@@ -34,7 +34,7 @@ class Controller @Inject() (val undoManager: UndoManager, var board: BoardInterf
     // Create a default Board
 //    board = BoardInterface.apply(Nil, Nil, "default")
     // with DI
-    board = injector.instance[BoardInterface](Names.named("default"))
+    board = injector.instance[BoardInterface]
     notifyObservers()
   }
 

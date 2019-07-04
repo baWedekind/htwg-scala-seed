@@ -18,25 +18,9 @@ class FileIO extends FileIOInterface {
     val json: JsValue = Json.parse(source)
     val size = (json \ "grid" \ "size").get.toString.toInt
     val injector = Guice.createInjector(new ManscalaModule)
-    size match {
-      case 1 => grid = injector.instance[GridInterface](Names.named("tiny"))
-      case 4 => grid = injector.instance[GridInterface](Names.named("small"))
-      case 9 => grid = injector.instance[GridInterface](Names.named("normal"))
-      case _ =>
-    }
     board = injector.instance[BoardInterface]
-    for (index <- 0 until size * size) {
-      val row = (json \\ "row")(index).as[Int]
-      val col = (json \\ "col")(index).as[Int]
-      val cell = (json \\ "cell")(index)
-      val value = (cell \ "value").as[Int]
-      grid = grid.set(row, col, value)
-      val given = (cell \ "given").as[Boolean]
-      val showCandidates = (cell \ "showCandidates").as[Boolean]
-      if (given) grid = grid.setGiven(row, col, value)
-      if (showCandidates) grid = grid.setShowCandidates(row, col)
-    }
-    grid
+
+    board
   }
 
   override def save(undoManager: UndoManager): Unit = {
@@ -47,17 +31,10 @@ class FileIO extends FileIOInterface {
     pw.close
   }
 
-  implicit val cellWrites = new Writes[CellInterface] {
-    def writes(cell: CellInterface) = Json.obj(
-      "value" -> cell.value,
-      "given" -> cell.given,
-      "showCandidates" -> cell.showCandidates
-    )
-  }
 
   def undoToJson(undo: UndoManager):JsObject = {
     Json.obj(
-      "redoStack" -> Json.arr(undo.redoStack),
+//      "redoStack" -> Json.arr(undo.redoStack),
     )
   }
 
