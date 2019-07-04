@@ -1,14 +1,20 @@
 package de.htwg.se.manscala.controller.controllerComponent.controllerAdvImpl
 
+import com.google.inject.name.Names
+import com.google.inject.{Guice, Inject, Injector}
+import net.codingwell.scalaguice.InjectorExtensions._
+import de.htwg.se.manscala.ManscalaModule
 import de.htwg.se.manscala.controller.controllerComponent.{Command, ControllerInterface}
 import de.htwg.se.manscala.model.boardComponent.BoardInterface
 import de.htwg.se.manscala.model.pitComponent.pitMancalaImpl.MancalaPit
 import de.htwg.se.manscala.model.playerComponent.PlayerInterface
 import de.htwg.se.manscala.util.{Observable, UndoManager}
 
-class Controller(val undoManager: UndoManager, var board: BoardInterface, var currPlayer: Int) extends Observable with
+class Controller @Inject() (val undoManager: UndoManager, var board: BoardInterface, var currPlayer: Int = 0) extends Observable with
   ControllerInterface {
+  this.currPlayer = board.getPlayers().head.getId()
   private var notifier = ""
+  val injector: Injector = Guice.createInjector(new ManscalaModule)
 
   override def getNotifier(): String = this.notifier
 
@@ -26,7 +32,9 @@ class Controller(val undoManager: UndoManager, var board: BoardInterface, var cu
 
   override def createDefaultBoard(): Unit = {
     // Create a default Board
-    board = BoardInterface.apply(Nil, Nil, "default")
+//    board = BoardInterface.apply(Nil, Nil, "default")
+    // with DI
+    board = injector.instance[BoardInterface]
     notifyObservers()
   }
 

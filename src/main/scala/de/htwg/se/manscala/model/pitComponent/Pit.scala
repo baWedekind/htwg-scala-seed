@@ -1,5 +1,7 @@
 package de.htwg.se.manscala.model.pitComponent
 
+import com.google.inject.Provides
+import com.google.inject.name.Named
 import de.htwg.se.manscala.model.pitComponent.pitMancalaImpl.MancalaPit
 import de.htwg.se.manscala.model.pitComponent.pitNormalImpl.NormalPit
 import de.htwg.se.manscala.model.playerComponent.PlayerInterface
@@ -24,7 +26,8 @@ object Pit {
   /**
     * Apply method for factory style action.
     */
-  def apply(isMancala: Boolean, pl: PlayerInterface): Pit = if (isMancala) {
+  @Provides
+  def apply(@Named("isMancala") isMancala: Boolean, @Named("player") pl: PlayerInterface): Pit = if (isMancala) {
     new MancalaPit(pl)
   } else {
     new NormalPit(pl)
