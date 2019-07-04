@@ -18,7 +18,6 @@ class MoveCommand(chosenPit: Int, var board: BoardInterface, var savedStones: In
       if (tuple._1) {
         controller.switchPlayer()
       }
-      controller.notifyObservers()
       true
     }
   }

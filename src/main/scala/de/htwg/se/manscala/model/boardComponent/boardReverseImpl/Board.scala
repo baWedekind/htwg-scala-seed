@@ -71,7 +71,8 @@ case class Board (players: List[PlayerInterface],
     var stones = 0
     stones = pits(chosenPit).asInstanceOf[NormalPit].emptyPit()
     for(j <- 1 to stones) {
-      // (chosenPit +j) / pits.size should be 0
+      // (chosenPit +j) % pits.size should form Modulo Ring
+      println("Incrementing [" + (chosenPit + j) % pits.size + "] with j = " + j)
       pits((chosenPit + j) % pits.size).incr()
     }
     ((chosenPit + stones % pits.size) / Board.SIDE_LENGTH !=

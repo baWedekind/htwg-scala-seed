@@ -176,7 +176,7 @@ class Gui(controller: ControllerInterface) extends Frame with Observer {
       x <- 0 until row
       y <- 0 until col
     } {
-      guiPits(x)(y).text = controller.board.pits(positionToArray(x, y)).toString()
+      guiPits(x)(y).text = controller.board.getPits()(positionToArray(x, y)).toString()
     }
 
     repaint

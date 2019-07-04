@@ -13,10 +13,6 @@ class Tui(controller: ControllerInterface) extends Observer {
       case "q" => ()
       case "undo"=> controller.undoManager.undoStep()
       case "redo" => controller.undoManager.redoStep()
-//      case "s" =>
-//        val (success, solvedGrid) = new Solver(board).solve;
-//        if (success) println("Puzzle solved")else println("This puzzle could not be solved!")
-//        solvedGrid
       case int(x) => {
         val Commalomadommadomm: Command = Command.apply(x.toInt, controller.board, 0,
           controller.getCurrentPlayer(), controller, "move")
